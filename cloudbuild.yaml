@@ -1,17 +1,17 @@
 steps:
 - name: python:3.12
   entrypoint: bash
+  env:
+    - 'DATA_JSON=$_DATA_JSON'
   args:
     - "-c"
     - |
+      set -e  # Exit on error
       apt-get update && apt-get install -y ffmpeg
+      python -m ensurepip
+      pip install --upgrade pip
       pip install -r requirements.txt
-
-- name: python:3.12
-  entrypoint: python
-  env:
-  - 'DATA_JSON=$_DATA_JSON'
-  args: ["-u", "main.py"]
+      python -u main.py
 
 options:
   logging: CLOUD_LOGGING_ONLY
