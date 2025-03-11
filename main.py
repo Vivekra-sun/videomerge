@@ -17,7 +17,7 @@ import random
 
 data_json = os.getenv('DATA_JSON', '{}')
 data = json.loads(data_json)
-print(data)
+print("input payload is: ",data)
 firebaseCredentials = requests.get("https://imagesai.appypie.com/"+data["data"]["input"]["Engine"]["credentials"])
 firebaseCredentialsJson = firebaseCredentials.json()
 temp_file_path = ""
