@@ -1,0 +1,18 @@
+steps:
+- name: python:3.12
+  entrypoint: bash
+  args:
+    - "-c"
+    - |
+      apt-get update && apt-get install -y ffmpeg
+      pip install -r requirements.txt
+
+- name: python:3.12
+  entrypoint: python
+  env:
+  - 'DATA_JSON=$_DATA_JSON'
+  args: ["-u", "main.py"]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_32'
