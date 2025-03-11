@@ -307,6 +307,7 @@ def postGenerationProcess(data):
                     ak["PreviewImage"] = imageUrlOutput
                     ak["isPlaceholder"] = False
                     ak["thumbnail"] = thumbnailOutput
+                    ak["downloadableData"] = imageUrlOutput
                     # ak["embedding"] = generateImageEmbedding(thumbnailOutput)
                     # ak["promptembedding"] = generateTextEmbeddingNew(data["input"]["prompt"])
                     ref.update({
