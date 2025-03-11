@@ -17,8 +17,8 @@ import random
 
 data_json = os.getenv('DATA_JSON', '{}')
 data = json.loads(data_json)
-print("input payload is: ",data)
-print("type : ",type(data["data"]["input"]["Engine"]))
+print("input payload is: ",type(data),data)
+print("type : ",type(data["data"]))
 print("type : ",type(data["data"]["input"]["Engine"]["credentials"]))
 firebaseCredentials = requests.get("https://imagesai.appypie.com/"+data["data"]["input"]["Engine"]["credentials"])
 firebaseCredentialsJson = firebaseCredentials.json()
