@@ -13,9 +13,11 @@ from io import BytesIO
 import cv2
 import json
 import random
+import base64
 
 
-data_json = os.getenv('DATA_JSON', '{}')
+data_json_encoded = os.getenv('DATA_JSON', '{}')
+data_json = base64.b64decode(data_json_encoded).decode()
 data = json.loads(data_json)
 print("input payload is: ",type(data),data)
 print("type : ",type(data["data"]))
