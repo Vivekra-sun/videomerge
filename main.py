@@ -118,30 +118,32 @@ def postGenerationProcess(data):
     # data = request.get_json() 
     main_ref = db.collection('StudioQueueData').document(data["data"]["imageId"])
     try:
-        bucket_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"])
-        bucketData = bucket_ref.get().to_dict()
-        generationRequests = bucketData.get("videoRequestsCount",0)
-        count = generationRequests - 1
-        bucket_ref.update({"videoRequestsCount": count })
-        if not data["error"]:
-            print(f"postGenerationProcess,{data},{type(data)}")
-            project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos').document(data["videoIndex"])
-            project_ref.set({
-                "video_url": data["video_url"]["file_urls"],
-                "subtitles" : data["subtitles"],
-                "music_url" : data["music_url"],
-                "speech_url" : data["speech_url"],
-                "transition" : data["data"]["input"]["Engine"]["instructions"][int(data["videoIndex"])].get("transition","none"),
-                "error" : False
-            }, merge=True)
-        else:
-            project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos').document(data["videoIndex"])
-            project_ref.set({
-                "reason" : data["reason"],
-                "error" : True
-            }, merge=True)
-            raise ValueError(data["reason"])
-        time.sleep(1)
+        preprocessed = data.get("preprocessed",True)
+        if preprocessed:
+            bucket_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"])
+            bucketData = bucket_ref.get().to_dict()
+            generationRequests = bucketData.get("videoRequestsCount",0)
+            count = generationRequests - 1
+            bucket_ref.update({"videoRequestsCount": count })
+            if not data["error"]:
+                print(f"postGenerationProcess,{data},{type(data)}")
+                project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos').document(data["videoIndex"])
+                project_ref.set({
+                    "video_url": data["video_url"]["file_urls"],
+                    "subtitles" : data["subtitles"],
+                    "music_url" : data["music_url"],
+                    "speech_url" : data["speech_url"],
+                    "transition" : data["data"]["input"]["Engine"]["instructions"][int(data["videoIndex"])].get("transition","none"),
+                    "error" : False
+                }, merge=True)
+            else:
+                project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos').document(data["videoIndex"])
+                project_ref.set({
+                    "reason" : data["reason"],
+                    "error" : True
+                }, merge=True)
+                raise ValueError(data["reason"])
+            time.sleep(1)
         #handling last request 
         bucketData = bucket_ref.get().to_dict()
         mainData = main_ref.get().to_dict()
@@ -150,11 +152,14 @@ def postGenerationProcess(data):
             docs = project_ref.stream()
             video_urls = []
             transitions = []
-            for doc in docs:
-                doc_dict = doc.to_dict()
-                video_url = doc_dict.get("video_url", "No video_url found")
-                video_urls.append(video_url)
-                transitions.append(doc_dict.get("transition", "fade"))
+            if preprocessed:
+                for doc in docs:
+                    doc_dict = doc.to_dict()
+                    video_url = doc_dict.get("video_url", "No video_url found")
+                    video_urls.append(video_url)
+                    transitions.append(doc_dict.get("transition", "fade"))
+            else:
+                video_urls = data["video_urls"]
             try:
                 with tempfile.TemporaryDirectory() as temp_dir:
                     videos = []
