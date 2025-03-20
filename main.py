@@ -116,6 +116,8 @@ def BqueryLog(payload,bucketId = False,method = ""):
 def postGenerationProcess(data):
     # document(data["imageId"]).collection(data["userid"]).document(data["uniqueId"]
     # data = request.get_json() 
+    if isinstance(data.get("data", {}).get("uniqueId"), list):
+        data["data"]["uniqueId"] = str(data["data"]["uniqueId"][0])
     main_ref = db.collection('StudioQueueData').document(data["data"]["imageId"])
     try:
         preprocessed = data.get("preprocessed",True)
