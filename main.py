@@ -148,18 +148,22 @@ def postGenerationProcess(data):
         bucketData = bucket_ref.get().to_dict()
         mainData = main_ref.get().to_dict()
         if(bucketData["videoRequestsCount"]<=0 and not mainData["isGenerationDone"]):
-            project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos')
-            docs = project_ref.stream()
             video_urls = []
             transitions = []
             if preprocessed:
+                project_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection('videos')
+                docs = project_ref.stream()
                 for doc in docs:
                     doc_dict = doc.to_dict()
                     video_url = doc_dict.get("video_url", "No video_url found")
                     video_urls.append(video_url)
                     transitions.append(doc_dict.get("transition", "fade"))
             else:
-                video_urls = data["video_urls"]
+                video_urls = data["video_url"]
+                index = 0
+                for video in data["data"]["input"]["Engine"]["videos"]:
+                    transitions.append(data["data"]["input"]["Engine"]["instructions"][index]["transition"])
+                    index = index+1
             try:
                 with tempfile.TemporaryDirectory() as temp_dir:
                     videos = []
