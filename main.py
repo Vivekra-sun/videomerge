@@ -303,7 +303,8 @@ def postGenerationProcess(data):
                         result = subprocess.run(cmd, text=True)
                     
                     final_output = os.path.join(temp_dir, f"overLappedVideo.mp4")
-                    subprocess.run(f'ffmpeg -y -i {merged_Video_file} -i {merged_audio_file} -i {merged_subtitle_file} -c:v copy -c:a aac -c:s mov_text {final_output} 2>/dev/null', shell=True)
+                    # subprocess.run(f'ffmpeg -y -i {merged_Video_file} -i {merged_audio_file} -i {merged_subtitle_file} -c:v copy -c:a aac -c:s mov_text {final_output} 2>/dev/null', shell=True)
+                    subprocess.run(f'ffmpeg -y -i {merged_Video_file} -i {merged_audio_file} -i {merged_subtitle_file} -c:v libx264 -pix_fmt yuv420p -c:a aac -c:s mov_text {final_output} 2>/dev/null', shell=True)
                     gmt = time.gmtime()
                     ts = calendar.timegm(gmt)
                     blob = bucket.blob(f'{data["data"]["userid"]}/videoMerger{str(ts)}{str(random.randint(1000, 2000))}.mp4')
