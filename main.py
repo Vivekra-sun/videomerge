@@ -120,10 +120,10 @@ def postGenerationProcess(data):
     if isinstance(data.get("data", {}).get("uniqueId"), list):
         data["data"]["uniqueId"] = str(data["data"]["uniqueId"][0])
     main_ref = db.collection('StudioQueueData').document(data["data"]["imageId"])
+    bucket_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"])
     try:
         preprocessed = data.get("preprocessed",True)
         if preprocessed:
-            bucket_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"])
             bucketData = bucket_ref.get().to_dict()
             generationRequests = bucketData.get("videoRequestsCount",0)
             count = generationRequests - 1
