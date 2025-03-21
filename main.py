@@ -289,10 +289,15 @@ def postGenerationProcess(data):
                         for i, video in enumerate(video_files_with_duration):
                             input_cmd.extend(["-i", video["path"]])
                             if i > 0:
-                                if i==1:
-                                    filters.append(f"[{i-1}:v][{i}:v]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
-                                else:
-                                    filters.append(f"[v{i-1}][{i}:v]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
+                                    if i == 1:
+                                        filters.append(f"[{i-1}:v]settb=1/15360[v{i-1}];[{i}:v]settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
+                                    else:
+                                        filters.append(f"[v{i-1}]settb=1/15360[v{i-1}];[{i}:v]settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
+
+                                # if i==1:
+                                #     filters.append(f"[{i-1}:v][{i}:v]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
+                                # else:
+                                #     filters.append(f"[v{i-1}][{i}:v]xfade=transition={video['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
                             offset = offset + float(video["duration"])-1
                                 
 
