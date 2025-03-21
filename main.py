@@ -117,12 +117,12 @@ def postGenerationProcess(data):
     # document(data["imageId"]).collection(data["userid"]).document(data["uniqueId"]
     # data = request.get_json() 
     print(data)
-    if isinstance(data.get("data", {}).get("uniqueId"), list):
-        data["data"]["uniqueId"] = str(data["data"]["uniqueId"][0])
     main_ref = db.collection('StudioQueueData').document(data["data"]["imageId"])
     bucket_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"])
     payload_ref = db.collection('StudioQueueData').document(data["data"]["imageId"]).collection(data["data"]["userid"]).document(data["data"]["uniqueId"]).collection("videos").document("payload")
     data = payload_ref.get().to_dict()
+    if isinstance(data.get("data", {}).get("uniqueId"), list):
+        data["data"]["uniqueId"] = str(data["data"]["uniqueId"][0])
     try:
         preprocessed = data.get("preprocessed",True)
         if preprocessed:
