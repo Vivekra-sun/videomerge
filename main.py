@@ -150,7 +150,8 @@ def postGenerationProcess(data):
         #handling last request 
         bucketData = bucket_ref.get().to_dict()
         mainData = main_ref.get().to_dict()
-        if(bucketData["videoRequestsCount"]<=0 and not mainData["isGenerationDone"]):
+        # if(bucketData["videoRequestsCount"]<=0 and not mainData["isGenerationDone"]):
+        if(True):
             video_urls = []
             transitions = []
             if preprocessed:
