@@ -20,9 +20,9 @@ data_json_encoded = os.getenv('DATA_JSON', '{}')
 data_json = base64.b64decode(data_json_encoded).decode()
 data = json.loads(data_json)
 print("input payload is: ",type(data),data)
-print("type : ",type(data["data"]))
-print("type : ",type(data["data"]["input"]["Engine"]["credentials"]))
-firebaseCredentials = requests.get("https://imagesai.appypie.com/"+data["data"]["input"]["Engine"]["credentials"])
+# print("type : ",type(data["data"]))
+# print("type : ",type(data["credentials"]))
+firebaseCredentials = requests.get("https://imagesai.appypie.com/"+data["credentials"])
 firebaseCredentialsJson = firebaseCredentials.json()
 temp_file_path = ""
 with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=".json") as temp_file:
