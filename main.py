@@ -292,14 +292,14 @@ def postGenerationProcess(data):
                             input_cmd.extend(["-i", video["path"]])
                             if i > 0:
                                     if i == 1:
-                                        #if video_files_with_duration[i-1]['transition']!="none":
-                                            #filters.append(f"[{i-1}:v]fps=24,settb=1/15360[v{i-1}];[{i}:v]fps=24,settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition={video_files_with_duration[i-1]['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
-                                        #else:
+                                        if video_files_with_duration[i-1]['transition']!="none":
+                                            filters.append(f"[{i-1}:v]fps=24,settb=1/15360[v{i-1}];[{i}:v]fps=24,settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition={video_files_with_duration[i-1]['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
+                                        else:
                                             filters.append(f"[{i-1}:v]fps=24,settb=1/15360[v{i-1}];[{i}:v]fps=24,settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition=fade:duration=0:offset={offset}[v{i}];")
                                     else:
-                                        #if video_files_with_duration[i-1]['transition']!="none":
+                                        if video_files_with_duration[i-1]['transition']!="none":
                                             #filters.append(f"[v{i-1}]fps=24,settb=1/15360[v{i-1}];[{i}:v]fps=24,settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition={video_files_with_duration[i-1]['transition']}:duration={transistion_duration}:offset={offset}[v{i}];")
-                                        #else:
+                                        else:
                                             filters.append(f"[v{i-1}]fps=24,settb=1/15360[v{i-1}];[{i}:v]fps=24,settb=1/15360[v{i}];[v{i-1}][v{i}]xfade=transition=fade:duration=0:offset={offset}[v{i}];")
 
                                 # if i==1:
